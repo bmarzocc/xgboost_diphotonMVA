@@ -24,6 +24,7 @@ python3 xgboost_TrainDiphotonMVA.py --vars 'leadptom,subleadptom,leadeta,sublead
 ```
 
 Options:
+
     * --vars: input training variables 
     * --useDMatrix: use xgboost DMatrix for training (NOTE: no difference wrt the standard training algorithm) 
     * --useMC: use MC as background, instead of the default DataDriven+PP backgrounds
@@ -41,6 +42,7 @@ python3 tools/convert_pkl2xml.py --infile diphotonMVA_xgboost_model_UL16_preVFP_
 ```
 
 Options:
+
     * --infile: input pkl file
     * --vars: input training variables 
 
@@ -52,6 +54,7 @@ python3 evalMVA.py --inTree Bkgs_UL16_preVFP_dataDriven_absWeights_wSig.root/Bkg
 ```
 
 Options:
+
     * --inTree: input tree
     * --weights: input xml weight files (NOTE: more then one file can be given as an input as a string: '... , ... , ...')
     * --vars: input training variables 
@@ -63,6 +66,7 @@ python3 draw_ROC.py --absW --wSig
 ```
 
 options:
+
     * --negW1: set all negative weights to 1 
     * --negW0: set all negative weights to 0              
     * --absW: set all negative weights to their absolute values  
