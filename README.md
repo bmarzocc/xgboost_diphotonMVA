@@ -62,7 +62,7 @@ Options:
 5) Draw the ROC curve with the weights you want:
 
 ```
-python3 draw_ROC.py --absW --wSig
+python3 draw_ROC.py --absW
 ```
 
 options:

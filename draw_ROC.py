@@ -166,33 +166,22 @@ if __name__ == '__main__':
   df_bkg['target'] = np.zeros(len(df_bkg.index))
   df_bkg['target'] = df_bkg['target'].astype('int')
   
-  #Define standard weights
-  df_sig['weight_noWSig'] = df_sig['weight_pure']
-  df_bkg['weight_noWSig'] = df_bkg['weight_pure'] * df_bkg['Norm_SFs']
-  
   #Apply additional weights
   if wSig:
     df_sig['weight'] = df_sig['weight'] * df_sig['weight_wSig']
   if negW0:
-    df_sig['weight'] = df_sig['weight'] * df_sig['weight_posRatio']  
-    df_sig['weight_noWSig'] = df_sig['weight_noWSig'] * df_sig['weight_posRatio']  
+    df_sig['weight'] = df_sig['weight'] * df_sig['weight_posRatio']   
   if absW:       
     df_sig['weight'] = df_sig['weight'] * df_sig['weight_absRatio']    
-    df_sig['weight_noWSig'] = df_sig['weight_noWSig'] * df_sig['weight_absRatio']  
 
   #Deal with negative weights
   df_sig = normalizeWeight(df_sig,'weight',negW0,negW1,absW)
-  df_sig = normalizeWeight(df_sig,'weight_noWSig',negW0,negW1,absW)
   sig_sum = df_sig.sum(0)['weight']
-  sig_sum_noWSig = df_sig.sum(0)['weight_noWSig']
   
   #Deal with negative weights
   df_bkg = normalizeWeight(df_bkg,'weight',negW0,negW1,absW)
-  df_bkg = normalizeWeight(df_bkg,'weight_noWSig',negW0,negW1,absW)
   bkg_sum = df_bkg.sum(0)['weight']
-  bkg_sum_noWSig = df_bkg.sum(0)['weight']
   df_bkg['weight'] = df_bkg['weight'].apply(lambda x: x*(sig_sum/bkg_sum))
-  df_bkg['weight_noWSig'] = df_bkg['weight_noWSig'].apply(lambda x: x*(sig_sum_noWSig/bkg_sum_noWSig))
   
   #Define inputs
   X_train_sig = df_sig[df_sig['isTest']<0.5]
@@ -204,21 +193,21 @@ if __name__ == '__main__':
   X_test = pd.concat((X_test_sig,X_test_bkg)) 
   
   W_train = X_train['weight'].values
-  W_train_noWSig = X_train['weight_noWSig'].values
   Y_train = X_train['target'].values
   predY_train = X_train['newMVA'].values
   #predY_train = X_train['newMva_transformed'].values
   
   W_test = X_test['weight'].values
-  W_test_noWSig = X_test['weight_noWSig'].values
   Y_test = X_test['target'].values
   predY_test = X_test['newMVA'].values  
   #predY_test = X_test['newMVA_transformed'].values  
   
-  print('ROC with wSig:')  
-  drawScores(predY_train,predY_test,W_train,W_test,40,-1.,1.,'BDT_wSig')
-  drawROC(Y_train,Y_test,predY_train,predY_test,W_train,W_test,'ROC_wSig') 
-  print('ROC without wSig:') 
-  drawScores(predY_train,predY_test,W_train_noWSig,W_test_noWSig,40,-1.,1.,'BDT_noWSig')
-  drawROC(Y_train,Y_test,predY_train,predY_test,W_train_noWSig,W_test_noWSig,'ROC_noWSig')   
+  if wSig:
+    print('ROC with wSig:')  
+    drawScores(predY_train,predY_test,W_train,W_test,40,-1.,1.,'BDT_wSig')
+    drawROC(Y_train,Y_test,predY_train,predY_test,W_train,W_test,'ROC_wSig') 
+  else:  
+    print('ROC without wSig:') 
+    drawScores(predY_train,predY_test,W_train,W_test,40,-1.,1.,'BDT_noWSig')
+    drawROC(Y_train,Y_test,predY_train,predY_test,W_train,W_test,'ROC_noWSig')   
   
