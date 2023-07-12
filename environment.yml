@@ -1,0 +1,29 @@
+name: conda-env
+channels:
+  - conda-forge
+dependencies:
+  - python>=3.10
+  - root=6.28
+  - pyaml
+  - xrootd
+  - uproot
+  - uproot3
+  - awkward>=1.5
+  - hyperopt
+  - numba
+  - pyarrow
+  - pandas
+  - rich
+  - matplotlib
+  - vector
+  - conda-pack
+  - tqdm
+  - dill
+  - enlighten
+  - scipy
+  - jupyter
+  - ipython
+  - mistune
+  - pytables
+  - seaborn
+  - pip
